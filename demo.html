@@ -3,10 +3,13 @@
         <title>demo</title>
         <style>
             body { margin: 0; }
-            canvas { width: 100%; height: 100% }
+            canvas { width: 50%; height: 50% }
         </style>
     </head>
     <body>
+    <div>
+        <input type="text" placeholder="sahdjksahdsajkdh">
+    </div>
     <script src="./lib/three.min.js"></script>
     <script src="./lib/OrbitControls.js"></script>
         <script>
@@ -23,25 +26,46 @@
             var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
             var cube = new THREE.Mesh( geometry, material );
             scene.add( cube );
-
+            
             camera.position.z = 5;
+                        controls = new THREE.OrbitControls( camera, renderer.domElement );
 
             var render = function () {
                 requestAnimationFrame( render );
 
                 //cube.rotation.x += 0.01;
-                cube.rotation.y += 0.005;
+                cube.rotation.y += 0.000;
 
                 renderer.render(scene, camera);
             };
 
+                    function animate()
+                    {
+                        requestAnimationFrame( animate );
+                        render();
+                        update();
+                    }
+                    function update()
+                    {
+                        if ( keyboard.pressed("z") )
+                        {
+                            // do something
+                        }
 
-            var OrbitControls = new THREE.OrbitControls(camera);
-            OrbitControls.autoRotate = true;
-            var clock = new THREE.Clock();
+                        controls.update();
+                        stats.update();
+                    }
 
-            var delta = clock.getDelta();
-            OrbitControls.update(delta);
+                    function render()
+                    {
+                        renderer.render( scene, camera );
+                    }                    
+            // var OrbitControls = new THREE.OrbitControls(camera);
+            // OrbitControls.autoRotate = true;
+            // var clock = new THREE.Clock();
+
+            // var delta = clock.getDelta();
+            // OrbitControls.update(delta);
 
             render();
 

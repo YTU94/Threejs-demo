@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo-Test</title>
+	<script src="./lib/three.min.js"></script>
+    <script src="./lib/OrbitControls.js"></script>
+    <script src="./lib/dat.gui.min.js"></script>    
+    <script src="./lib/Tween.js"></script> 
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+.canvas{ position: relative;  z-index: 10003;}
+.contents{position: absolute;top: 100px;  left: 60%; z-index: 10004;  }
+</style>
+</head>
+<body onload="init()">
+    <div id="canvas" class="canvas">
+        <canvas id="MainCanvas" width="100%" height="100%"></canvas>
+    </div>
+    <div class="contents">
+
+    <form action="">
+    <div id="controls-problems" class="problems">
+            <div class="row">
+              <div class="col-xs-2">
+                <input type="text" id="input-x" class="form-control" value="" placeholder=".col-xs-2">
+              </div>
+              <div class="col-xs-2">
+                <input type="text" id="input-y" class="form-control" value="65" placeholder=".col-xs-3"  value="65" onfocus="if (value =='65){value =''}" onblur="if (value ==''){value='65}">
+              </div>
+              <div class="col-xs-2">
+                <input type="text" id="input-z" class="form-control" value="" placeholder=".col-xs-4">
+              </div>
+            </div>
+
+            <div class="row" style="padding-left: 15px;">
+                <!-- Standard button -->
+                <button type="button" class="btn btn-default" onclick="showProblems()">ShowProblems</button>
+
+                <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                <button type="button" class="btn btn-primary" onclick="createMesh()">ShowEquipments</button>
+
+                <!-- Indicates a successful or positive action -->
+                <button type="button" class="btn btn-success" onclick="remoteCube()">RemoteCube</button>                
+            </div>
+
+            <!-- Single button -->
+            <div class="btn-group">
+              <select class="form-control" id="select" onchange="changeScene('select')">
+                  <option value="">环境</option>
+                  <option id="scene-1" value="back_2.jpg" >0</option>
+                  <option id="scene-2" value="back_0.jpg" >1</option>
+                  <option id="scene-3" value="back_1.jpg" >2</option>
+                  <option id="scene-4" value="back_2.jpg" >3</option>
+                </select>
+            </div>
+
+            <!-- Single button -->
+            <div class="btn-group">
+              <button type="button" class="titleName btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                问题 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="javascript:void(0)"  class="problemsV" onclick="changeColorPosition(new Array(['200','200','200',0x00ff00],['100','100','100',0x00ff00]))">裂缝</a></li>
+                <li><a href="javascript:void(0)" class="problemsV" onclick="changeColorPosition(new Array(['200','200','200',0xffff00],['100','100','100',0xffff00]))">倾斜</a></li>
+                <li><a href="javascript:void(0)" class="problemsV" onclick="changeColorPosition(new Array(['200','200','200',0xff0000],['100','100','100',0xff0000]))">沉降</a></li>
+              </ul>
+            </div>
+    </div>
+    </form>   
+
+	<script>
+
+//用于鼠标射线的
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+var box = null;
+var meshEquip = null;
+
+var cube1 =null; 
+var cube2 =null; 
+var cube3 =null; 
+var cube = null;
+
+var scene = null;
+var camera = null;
+var renderer = null;
+var canvas = null;
+/*
+* 大楼的参数设定
+*/    
+var buildingX = 340;
+var buildingY = 600;
+var buildingZ = 100;
+var balconyNum = Math.floor(parseInt(buildingX) / 100);
+var balconyXArray = Array();
+for (var i = 0; i < balconyNum; i++) {
+    balconyXArray[i] = (((i+1)/balconyNum) - (1/(2*balconyNum)))*buildingX;
+}
+var balconyX = (parseInt(buildingX)/balconyNum)/2;
+var balconyY = (parseInt(buildingY)/balconyNum)/2;
+
+
+console.log(balconyXArray);
+console.log(balconyX);
+console.log(balconyNum);
+
+    animate();
+
+	function init() {
+		//scene
+		scene = new THREE.Scene();
+		scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+
+		//camera
+		camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight, 0.1, 20000);
+		camera.position.set(-50,150,1400);
+		camera.lookAt(scene.position);
+		scene.add(camera);
+		//renderer
+
+		renderer = new THREE.WebGLRenderer({
+			canvas:document.getElementById('MainCanvas')},
+			{antialias:true});
+		renderer.setSize(window.innerWidth,window.innerHeight);
+
+         //axes
+         var axes = new THREE.AxisHelper( 20000 );
+         scene.add(axes);
+		//light
+		var light = new THREE.PointLight(0xdfebf0, 1.25);
+		light.position.set(0, 200, 100);
+		light.position.multiplyScalar(5);
+		light.castShadow = true;
+		scene.add(light);
+		//plane
+        var groundTexture = THREE.ImageUtils.loadTexture( "./image/back_2.jpg" );
+        groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat.set( 25, 25 );
+        groundTexture.anisotropy = 16;
+
+        var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, map: groundTexture } );
+
+        var mesh = new THREE.Mesh( new THREE.PlaneGeometry( 20000, 20000 ), groundMaterial );
+        mesh.position.y = -0;
+        mesh.rotation.x = - Math.PI / 2;
+        mesh.receiveShadow = true;
+        scene.add( mesh );
+        //cube 大楼
+        var geometry = new THREE.CubeGeometry( buildingX, buildingY, buildingZ, 1, 1, 1  );
+        var material1 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material2 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material3 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material4 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material5 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/zm_11.png"),transparent:true, opacity:0.8 } );
+        var material6 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+         
+        var materials = [material1, material2, material3, material4, material5, material6];
+         
+        var material = new THREE.MeshFaceMaterial( materials );
+
+        cubeM = new THREE.Mesh( geometry, material );
+        cubeM.position.set(0,buildingY/2,0);
+
+        scene.add( cubeM );
+
+        function addBalcony(balconyNum){
+            var numbers = parseInt(balconyNum);
+            for (var i = 0; i < balconyXArray.length; i++) {
+            console.log(balconyXArray[i]);
+            createBalcony(balconyXArray[i]);
+
+            }
+        }
+
+        function createBalcony(balconyX){
+            //阳台-bottom
+            var geometry = new THREE.CubeGeometry( 70,40,5 );
+            var loadTexture = THREE.ImageUtils.loadTexture("./image/bm_11.png");
+            var material = new THREE.MeshBasicMaterial( { 
+                color: 0xbbbbbb,
+                map: loadTexture,
+                wireframe: false });
+            cube = new THREE.Mesh( geometry, material );
+            cube.position.x= balconyX - 0.5*buildingX;
+            cube.position.y=30;
+            cube.position.z=-92.5;
+            console.log(0);
+            scene.add( cube );
+            //阳台-left
+            var geometry = new THREE.CubeGeometry( 5,40,40 );
+            var material = new THREE.MeshBasicMaterial( { 
+                color: 0xbbbbbb,
+                map:loadTexture,
+                wireframe: false });
+            cube = new THREE.Mesh( geometry, material );
+            cube.position.x=balconyX - 0.5*buildingX - 32.5;
+            cube.position.y=30;
+            cube.position.z=-70; 
+            console.log(1);
+
+            scene.add( cube );
+            //阳台-right
+            var geometry = new THREE.CubeGeometry( 5,40,40 );
+            var material = new THREE.MeshBasicMaterial( { 
+                color: 0xbbbbbb,
+                map:loadTexture,
+                wireframe: false });
+            cube = new THREE.Mesh( geometry, material );
+            cube.position.x=balconyX - 0.5*buildingX + 32.5;
+            cube.position.y=30;
+            cube.position.z=-70;
+            console.log(2);
+
+            scene.add( cube );
+            //阳台-far
+            var geometry = new THREE.CubeGeometry( 70,5,40 );
+            var material = new THREE.MeshBasicMaterial( { 
+                color: 0xbbbbbb,
+                map:loadTexture,
+                wireframe: false });
+            cube = new THREE.Mesh( geometry, material );
+            cube.position.x=balconyX - 0.5*buildingX;
+            cube.position.y=12.5;
+            cube.position.z=-70;
+            console.log(3);
+
+            scene.add( cube );            
+        }
+
+        addBalcony(balconyNum);
+
+
+
+    //入口-left
+        var geometry = new THREE.CubeGeometry( 5,45,40 );
+        var material = new THREE.MeshLambertMaterial( { 
+            color: 0x00ff00,
+            emissive: 0xff0000,
+            wireframe: false });
+        cube = new THREE.Mesh( geometry, material );
+        cube.position.x=32.5;
+        cube.position.y=27.5;
+        cube.position.z=70;            
+        scene.add( cube );
+        //入口-right
+        var geometry = new THREE.CubeGeometry( 5,45,40 );
+        var material = new THREE.MeshLambertMaterial( { 
+            color: 0x00ff00,
+            emissive: 0xff0000,
+            wireframe: false });
+        cube = new THREE.Mesh( geometry, material );
+        cube.position.x=-32.5;
+        cube.position.y=27.5;
+        cube.position.z=70;             
+        scene.add( cube );
+        //入口-far
+        var geometry = new THREE.CubeGeometry( 70,5,40 );
+        var material = new THREE.MeshLambertMaterial( { 
+            color: 0xff2c08,
+            emissive: 0xff2c08,
+            wireframe: false });
+        cube = new THREE.Mesh( geometry, material );
+        cube.position.x=0;
+        cube.position.y=55;
+        cube.position.z=70;             
+        scene.add( cube );
+
+        var OrbitControls = new THREE.OrbitControls(camera,renderer.domElement);
+        // OrbitControls.autoRotate = true;
+        // var clock = new THREE.Clock();
+        // var delta = clock.getDelta();
+        // OrbitControls.update(delta);
+
+        //立方体
+        // var geometry = new THREE.BoxGeometry( 50, 50, 50 );
+        // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        // box = new THREE.Mesh( geometry, material );
+        // scene.add( box );
+
+        // var position = null;
+        // box.position.set(100,100,100);
+        // var tween = new TWEEN.Tween(box.position);
+        // tween.to({x:200,y:200,z:200},2000);
+        // tween.start();
+        // var container = document.getElementById( 'canvas' );
+
+     
+        // // 在容器上注册事件，这里container也可以换成document
+
+        document.getElementById('MainCanvas').addEventListener( 'mousedown', onMouseDown, false );
+     
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        //贴图
+        var material = new THREE.MeshPhongMaterial({
+            ambient: 0x050505,
+            color: 0x0033ff,
+            specular: 0x555555,
+            shininess: 30
+        });
+        var material = new THREE.MeshPhongMaterial({
+            map: THREE.ImageUtils.loadTexture('http://wow.techbrood.com/uploads/1702/crate.jpg')
+        });
+
+        //console.log(scene);
+        renderer.render(scene,camera);
+	}
+
+    //createMesh
+    var img0 = "0.png";
+    var back2  = "back_2.jpg"
+    var imgFile = null;
+    var id = null;
+    var cubeArray = [];
+            var val  = document.getElementById('select');
+        console.log(val);
+    //changeScene
+    function changeScene(id){
+        var thisv = document.getElementById(id);
+        imgFile = thisv.value;
+    }
+    //changeColoPosition
+    function changeColorPosition(Array){
+        cubeArray = Array;  
+    }   
+    $('.problemsV').click(function(){
+        var a = $(this).html();
+        $('.titleName').html(a+" <span class='caret'></span>");
+    });
+    //createMesh 创建环境设备
+    function createMesh(){
+        //console.log('is ok????tell ,me')
+        var x = document.getElementById('input-x').value,
+            y = document.getElementById('input-y').value, 
+            z = document.getElementById('input-z').value;
+        console.log(x);
+        console.log(y);
+        console.log(z);
+        console.log(imgFile);
+        //指示牌
+        var Material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture("./image/"+imgFile),
+        wireframe: false,
+ 
+         } );
+        var Geometry  = new THREE.CubeGeometry(30,30,2);
+        meshEquip  = new THREE.Mesh(Geometry,Material);
+        meshEquip.name = "test";
+        meshEquip.position.set(x,y,z);
+        scene.add(meshEquip);
+        console.log("meshEquip:"+meshEquip);
+        //中部圆柱
+        var Material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            color: 0xaaaaaa
+        });        
+        var Geometry = new THREE.CylinderGeometry(2,2,50,30,1);
+        var meshCylinderM = new THREE.Mesh(Geometry,Material);
+        var y1 = parseInt(y)-40;
+        console.log("y1:"+y1);
+        meshCylinderM.position.set(x,y1,z);
+        console.log(meshCylinderM);
+        scene.add(meshCylinderM);
+        //底部圆柱
+        var Material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            color: 0xaaaaaa
+        });          
+        var Geometry = new THREE.CylinderGeometry(20,20,4,20,1);
+        var meshCylinder = new THREE.Mesh(Geometry,Material);
+        var y1 = parseInt(y)-62.5;
+        console.log("y1:"+y1);
+        meshCylinder.position.set(x,y1,z);
+        console.log(meshCylinder);
+        scene.add(meshCylinder);
+        //底部圆环
+        var Material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            color: 0xaaaaaa
+        });          
+        var Geometry = new THREE.TorusGeometry(20,4,100,100);
+        var meshC = new THREE.Mesh(Geometry,Material);
+        var y1 = parseInt(y)-62.5;
+        console.log("y1:"+y1);
+        meshC.position.set(x,y1,z);
+        meshC.rotation.x = -0.5 * Math.PI;
+        console.log(meshC);
+        scene.add(meshC);
+    }
+
+    //remoteCube
+    this.remoteCube = function(){
+        var allChildren = scene.children;
+        var lastObject = allChildren[allChildren.length-1];
+        if(lastObject instanceof THREE.Mesh){
+            scene.remove(lastObject);
+            this.numberOfObjects = scene.children.length;
+        }
+        renderer.render(scene,camera);
+    };
+    //showProblems
+    this.showProblems = function(){
+        console.log(cubeArray);
+        for (var i = 0; i < cubeArray.length; i++) {
+            var x = cubeArray[i][0];
+            var y = cubeArray[i][1];
+            var z = cubeArray[i][2];
+            var c = cubeArray[i][3];
+            var n = 'cube'+i;
+            console.log(x+'|'+y+'|'+z+'|'+c);
+            addCube(x,y,z,c,n);
+            console.log(i);
+        }
+    };
+    //addcub
+    this.addCube = function(x,y,z,c,n){
+
+        var cubeGeometry = new THREE.SphereGeometry(5,8,6,0,Math.PI*2,0,Math.PI);
+        var cubeMaterial = new THREE.MeshBasicMaterial({color:c,ambient:0xffff00});
+        n = new THREE.Mesh(cubeGeometry,cubeMaterial);
+        n.castShadow = true;
+        n.position.set(x,y,z);
+        scene.add(n);
+        console.log(n);
+
+        var position = null;
+        n.scale.set(1,1,1);
+        var tween = new TWEEN.Tween(n.scale);
+        tween.to({x:1.5,y:1.5,z:1.5},200);
+        tween.start();
+        tween.repeat(20);
+        console.log(n.scale);
+        //TWEEN.remove(tween);
+        //tween.to({x:1,y:1,z:1},2000);
+        //console.log(scene);
+        // var spotLight  =new THREE.spotLight(0xffffff);
+        // spotLight.target = cube;
+        // spotLight.castShadow = true;
+        // spotLight.position.set(scene.position);
+        // scene.add(spotLight);
+        // createMesh(img0);
+        // console.log(mesh);
+        // mesh.position.set(x+10,y+10,z+10);
+        // scene.add(mesh);
+        //cube.position.x += 0.01; 
+        //requestAnimationFrame(addCube);
+    };
+
+function onWindowResize() {
+ 
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+ 
+    renderer.setSize( window.innerWidth, window.innerHeight );
+ 
+}
+ 
+function onMouseDown( event ) {
+ 
+    mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+ 
+    raycaster.setFromCamera( mouse, camera );
+ 
+    var intersects = raycaster.intersectObject( meshEquip );
+ 
+    if ( intersects.length > 0 ) {
+                 
+        // 点击立方体时，将立方体变为红色
+        //box.material.color.setHex( 0xff0000 );
+        console.log('ok');
+        var e = window.event;
+        var screenX = e.clientX;
+        var screenY = e.clientY;
+        showPopover(screenX,screenY);
+        console.log('没问题的!');
+    } else {
+                 
+        // 如果没有点击到，则将立方体变回绿色
+        //box.material.color.setHex( 0x00ff00 );
+        console.log('false');
+                var e = window.event;
+        console.log(e.screenY);
+    }
+}   
+    
+    function showPopover(screenX,screenY){
+        var btn = document.createElement('div');
+        document.body.appendChild(btn);
+        console.log('X:'+screenX+'Y:'+screenY);
+        var x = parseInt(screenX);
+        var y = parseInt(screenY);
+        btn.innerHTML = '<h4>testetstete</h4><button type="button" id = "btn-close" onclick="closeP()">关闭</button>';
+        btn.style.position = 'absolute';
+        btn.style.top = y+'px';
+        btn.style.left = x+'px';
+        btn.style.width = '100px';
+        btn.style.height = '100px';
+        btn.style.background = '#ffffff';
+        btn.style.zIndex = '99999';
+        btn.setAttribute('class','Popover');
+        console.log('caiyicai');
+
+    } 
+
+
+
+    function closeP(){
+        console.log('cuole?');
+        $('.Popover').hide();
+    }
+
+        var i = 0;
+    function animate(){
+        requestAnimationFrame( animate );
+        TWEEN.update();
+        render();
+    }    
+    function render(){
+        // requestAnimationFrame(render);
+        // cube.rotation.z += 0.00;
+        renderer.render(scene, camera);
+        TWEEN.update();
+    }	
+
+    // function flashing(event){
+    //     i++;
+    //     console.log(i);
+    //     if (i%2 == '1') {
+    //         var scaleX = 2;
+    //         var scaleY = 2;
+    //         var scaleZ = 2;
+
+    //     } else{
+    //         var scaleX = 0.5;
+    //         var scaleY = 0.5;
+    //         var scaleZ = 0.5;            
+    //     }
+    //     event.rotation.x += 0.02;
+    //     event.scale.set(scaleX,scaleY,scaleZ);
+    // }
+
+	</script>
+</body>
+</html>

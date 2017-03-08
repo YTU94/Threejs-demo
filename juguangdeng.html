@@ -4,11 +4,16 @@
 		<meta charset="UTF-8">
 		<title>聚光灯</title>
 	</head>
-	<body onload="init()">
+	<body >
+	<div style='display: block;height: 80px; width: 1000px;'>
+		<input type="text" name="" id="" placeholder="sadsad">
+	</div>
+	<div style="display: absolute;top: 100px;left: 0;">
     <canvas id="mainCanvas" width="100%" height="100%" ></canvas>
+    </div>
 	
 
-    <script src="./lib/three.min.js"></script>
+    <script src="./lib/three.min.js"></script>
     <script src="./lib/OrbitControls.js"></script>
 
 	<script>
@@ -26,27 +31,26 @@
 			renderer.setSize(window.innerWidth,window.innerHeight);
 			//scene
 			scene = new THREE.Scene();
-
 	    camera = new THREE.OrthographicCamera(-5, 5, 3.75, -3.75, 0.1, 100);
 	    camera.position.set(5, 15, 25);
 	    camera.lookAt(new THREE.Vector3(0, 1, 0));
 	    scene.add(camera);
-
 	    //plane
 	    var plane = new THREE.Mesh(new THREE.PlaneGeometry(10,10,16,16),
 	    	new THREE.MeshLambertMaterial({color: 0xcccccc}));
 	    plane.rotation.x = -Math.PI / 2 ;
 	    plane.rotation.y = 0;
-
 	    plane.receiveShadow = true;
 	    scene.add(plane);
+	                 //axes
+             var axes = new THREE.AxisHelper( 20 );
+             scene.add(axes);
 	    //mesh 
 		 cube = new THREE.Mesh(new THREE.CubeGeometry(1, 2, 1),
 			                    new THREE.MeshLambertMaterial({color: 0x00ff00}));
 			cube.position.x = 2;
 			cube.casShadow = true;
 			scene.add(cube);
-
 			var light = new THREE.SpotLight(0xffff00, 0.9, 1000, Math.PI / 6, 25);
 			light.target = cube;
 			light.position.set(2, 5, 3);
@@ -56,29 +60,23 @@
 			//ambient light 一种 光的阻拦能力
 			var ambient = new THREE.AmbientLight(0x666666);
 			scene.add(ambient);
-
 			requestAnimationFrame(draw);
-
             var OrbitControls = new THREE.OrbitControls(camera);
             OrbitControls.autoRotate = true;
             var clock = new THREE.Clock();
-
             var delta = clock.getDelta();
             OrbitControls.update(delta);
 		}
-
 		function draw() {
 			alpha += 0.005;
 			if(alpha > Math.PI * 2) {
 				alpha -= Math.PI * 2;
 			}
 			cube.position.set(2 * Math.cos(alpha), 0, 2*Math.sin(alpha));
-
 	    renderer.render(scene,camera);
-
 			requestAnimationFrame(draw);
-
 		}
+		init();
 		</script>
 	</body>
 	</html>	
