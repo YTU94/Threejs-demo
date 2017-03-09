@@ -13,12 +13,16 @@
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
 <style>
 .canvas{ position: relative;  z-index: 10003;}
 .contents{position: absolute;top: 100px;  left: 60%; z-index: 10004;  }
+.popover{position: absolute;z-index: 10005;}
 </style>
 </head>
-<body onload="init()">
+<body>
     <div id="canvas" class="canvas">
         <canvas id="MainCanvas" width="100%" height="100%"></canvas>
     </div>
@@ -38,9 +42,11 @@
               </div>
             </div>
 
-            <div class="row" style="padding-left: 15px;">
+            <div class="row container" style="padding-left: 15px;">
                 <!-- Standard button -->
-                <button type="button" class="btn btn-default" onclick="showProblems()">ShowProblems</button>
+                <button type="button" class="btn btn-default popoverT"  title="Popover title"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="left" 
+            data-content="左侧的 Popover 中的一些内容<h1>keyima</h1><button type='button' onclick='closeBtn()'>关闭</button>" >ShowProblems</button>
 
                 <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
                 <button type="button" class="btn btn-primary" onclick="createMesh()">ShowEquipments</button>
@@ -62,7 +68,7 @@
 
             <!-- Single button -->
             <div class="btn-group">
-              <button type="button" class="titleName btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button type="" class="titleName btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 问题 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
@@ -95,26 +101,51 @@ var canvas = null;
 /*
 * 大楼的参数设定
 */    
-var buildingX = 340;
+var buildingX = 420;
 var buildingY = 600;
 var buildingZ = 100;
 var balconyNum = Math.floor(parseInt(buildingX) / 100);
+var balconyNumY = Math.floor(parseInt(buildingY) / 100);
 var balconyXArray = Array();
+var balconyYArray = Array();
 for (var i = 0; i < balconyNum; i++) {
     balconyXArray[i] = (((i+1)/balconyNum) - (1/(2*balconyNum)))*buildingX;
 }
+for (var i = 0; i < balconyNumY; i++) {
+    balconyYArray[i] = (((i+1)/balconyNumY) - (1/(2*balconyNumY)))*buildingY;
+}
+console.log('阳台X轴数组：'+balconyXArray);
+console.log('阳台Y轴数组：'+balconyYArray);
 var balconyX = (parseInt(buildingX)/balconyNum)/2;
-var balconyY = (parseInt(buildingY)/balconyNum)/2;
+var balconyY = (parseInt(buildingY)/balconyNumY)/2;
 
 
-console.log(balconyXArray);
 console.log(balconyX);
+console.log(balconyY);
 console.log(balconyNum);
+console.log(balconyNumY);
+
+    $('.dropdown-toggle').dropdown();
+    $(function () { 
+        $("[data-toggle='popover']").popover();
+        $('.popoverT').on('shown.bs.popover',function(){
+            showProblems();
+        });
+        $('.popoverT').on('hidden.bs.popover',function(){
+            remoteCube();
+            remoteCube();
+        })
+    });
     $('.problemsV').click(function(){
         var a = $(this).html();
         $('.titleName').html(a+" <span class='caret'></span>");
     });
-    
+
+    function closeBtn(){
+        $('.popoverT').popover('hide');
+        $('popoverT').povover('destory');
+    }
+    init();
     animate();
 
 	function init() {
@@ -130,8 +161,8 @@ console.log(balconyNum);
 		//renderer
 
 		renderer = new THREE.WebGLRenderer({
-			canvas:document.getElementById('MainCanvas')},
-			{antialias:true});
+			canvas:document.getElementById('MainCanvas'),
+			antialias:true});
 		renderer.setSize(window.innerWidth,window.innerHeight);
 
          //axes
@@ -179,17 +210,20 @@ console.log(balconyNum);
         cubeM.position.set(0,buildingY/2,0);
 
         scene.add( cubeM );
-
-        function addBalcony(balconyNum){
-            var numbers = parseInt(balconyNum);
+        //添加阳台
+        function addBalcony(balconyNum,balconyNumY){
+            //var numbers = parseInt(balconyNum);
             for (var i = 0; i < balconyXArray.length; i++) {
-            console.log(balconyXArray[i]);
-            createBalcony(balconyXArray[i]);
-
-            }
+                console.log("阳台："+i);
+                for (var a = 0; a < balconyYArray.length; a++) {
+                    console.log("阳台："+a);
+                    console.log(balconyXArray[i]+"|"+balconyYArray[a]);
+                    createBalcony(balconyXArray[i],balconyYArray[a]);
+                };
+            };
         }
-
-        function createBalcony(balconyX){
+        //create 阳台
+        function createBalcony(balconyX,balconyY){
             //阳台-bottom
             var geometry = new THREE.CubeGeometry( 70,40,5 );
             var loadTexture = THREE.ImageUtils.loadTexture("./image/bm_11.png");
@@ -199,7 +233,7 @@ console.log(balconyNum);
                 wireframe: false });
             cube = new THREE.Mesh( geometry, material );
             cube.position.x= balconyX - 0.5*buildingX;
-            cube.position.y=30;
+            cube.position.y= balconyY -20;
             cube.position.z=-92.5;
             console.log(0);
             scene.add( cube );
@@ -211,7 +245,7 @@ console.log(balconyNum);
                 wireframe: false });
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX - 32.5;
-            cube.position.y=30;
+            cube.position.y= balconyY -20;
             cube.position.z=-70; 
             console.log(1);
 
@@ -224,7 +258,7 @@ console.log(balconyNum);
                 wireframe: false });
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX + 32.5;
-            cube.position.y=30;
+            cube.position.y= balconyY -20;
             cube.position.z=-70;
             console.log(2);
 
@@ -237,7 +271,7 @@ console.log(balconyNum);
                 wireframe: false });
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX;
-            cube.position.y=12.5;
+            cube.position.y= balconyY -37.5;
             cube.position.z=-70;
             console.log(3);
 
@@ -250,9 +284,8 @@ console.log(balconyNum);
 
         //入口-left
         var geometry = new THREE.CubeGeometry( 5,45,40 );
-        var material = new THREE.MeshLambertMaterial( { 
-            color: 0x00ff00,
-            emissive: 0xff0000,
+        var material = new THREE.MeshBasicMaterial( { 
+            color: 0xbbbbbb,
             wireframe: false });
         cube = new THREE.Mesh( geometry, material );
         cube.position.x=32.5;
@@ -261,9 +294,8 @@ console.log(balconyNum);
         scene.add( cube );
         //入口-right
         var geometry = new THREE.CubeGeometry( 5,45,40 );
-        var material = new THREE.MeshLambertMaterial( { 
-            color: 0x00ff00,
-            emissive: 0xff0000,
+        var material = new THREE.MeshBasicMaterial( { 
+            color: 0xbbbbbb,
             wireframe: false });
         cube = new THREE.Mesh( geometry, material );
         cube.position.x=-32.5;
@@ -271,36 +303,34 @@ console.log(balconyNum);
         cube.position.z=70;             
         scene.add( cube );
         //入口-far
-        var geometry = new THREE.CubeGeometry( 70,5,40 );
-        var material = new THREE.MeshLambertMaterial( { 
-            color: 0xff2c08,
-            emissive: 0xff2c08,
+        var geometry = new THREE.CubeGeometry( 70,5,50 );
+        var material = new THREE.MeshBasicMaterial( { 
+            color: 0xbbbbbb,
             wireframe: false });
         cube = new THREE.Mesh( geometry, material );
         cube.position.x=0;
         cube.position.y=55;
-        cube.position.z=70;             
+        cube.position.z=75;             
         scene.add( cube );
 
         var OrbitControls = new THREE.OrbitControls(camera,renderer.domElement);
         // OrbitControls.autoRotate = true;
-        // var clock = new THREE.Clock();
-        // var delta = clock.getDelta();
-        // OrbitControls.update(delta);
+            // var clock = new THREE.Clock();
+            // var delta = clock.getDelta();
+            // OrbitControls.update(delta);
 
-        //立方体
-        // var geometry = new THREE.BoxGeometry( 50, 50, 50 );
-        // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-        // box = new THREE.Mesh( geometry, material );
-        // scene.add( box );
+            //立方体
+            // var geometry = new THREE.BoxGeometry( 50, 50, 50 );
+            // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            // box = new THREE.Mesh( geometry, material );
+            // scene.add( box );
 
-        // var position = null;
-        // box.position.set(100,100,100);
-        // var tween = new TWEEN.Tween(box.position);
-        // tween.to({x:200,y:200,z:200},2000);
-        // tween.start();
+            // var position = null;
+            // box.position.set(100,100,100);
+            // var tween = new TWEEN.Tween(box.position);
+            // tween.to({x:200,y:200,z:200},2000);
+            // tween.start();
         // var container = document.getElementById( 'canvas' );
-
      
         // // 在容器上注册事件，这里container也可以换成document
 
@@ -520,12 +550,12 @@ console.log(balconyNum);
 
     function animate(){
         requestAnimationFrame( animate );
-        TWEEN.update();
+        //TWEEN.update();
         render();
     }    
     function render(){
         // requestAnimationFrame(render);
-        // cube.rotation.z += 0.00;
+        //cube.rotation.z += 0.00;
         renderer.render(scene, camera);
         TWEEN.update();
     }	
