@@ -4,8 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Demo-Test</title>
 	<script src="./lib/three.min.js"></script>
-    <script src="./lib/OrbitControls.js"></script>
-    <script src="./lib/dat.gui.min.js"></script>    
+    <script src="./lib/OrbitControls.js"></script> 
     <script src="./lib/Tween.js"></script> 
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -13,8 +12,6 @@
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
 
 <style>
 .canvas{ position: relative;  z-index: 10003;}
@@ -35,7 +32,7 @@
                 <input type="text" id="input-x" class="form-control" value="" placeholder="输入X坐标">
               </div>
               <div class="col-xs-2">
-                <input type="text" id="input-y" class="form-control" value="65" placeholder="想让它上天吗"  value="65" onfocus="if (value =='65){value =''}" onblur="if (value ==''){value='65}">
+                <input type="text" id="input-y" class="form-control" value="65" placeholder="想让它上天吗"  value="65">
               </div>
               <div class="col-xs-2">
                 <input type="text" id="input-z" class="form-control" value="" placeholder="输入Y坐标">
@@ -82,48 +79,48 @@
 
 	<script>
 
-var i = 0;
-//用于鼠标射线的
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
-var box = null;
-var meshEquip = null;
+    var i = 0;
+    //用于鼠标射线的
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    var box = null;
+    var meshEquip = null;
 
-var cube1 =null; 
-var cube2 =null; 
-var cube3 =null; 
-var cube = null;
+    var cube1 =null; 
+    var cube2 =null; 
+    var cube3 =null; 
+    var cube = null;
 
-var scene = null;
-var camera = null;
-var renderer = null;
-var canvas = null;
-/*
-* 大楼的参数设定
-*/    
-var buildingX = 420;
-var buildingY = 600;
-var buildingZ = 100;
-var balconyNum = Math.floor(parseInt(buildingX) / 100);
-var balconyNumY = Math.floor(parseInt(buildingY) / 100);
-var balconyXArray = Array();
-var balconyYArray = Array();
-for (var i = 0; i < balconyNum; i++) {
-    balconyXArray[i] = (((i+1)/balconyNum) - (1/(2*balconyNum)))*buildingX;
-}
-for (var i = 0; i < balconyNumY; i++) {
-    balconyYArray[i] = (((i+1)/balconyNumY) - (1/(2*balconyNumY)))*buildingY;
-}
-console.log('阳台X轴数组：'+balconyXArray);
-console.log('阳台Y轴数组：'+balconyYArray);
-var balconyX = (parseInt(buildingX)/balconyNum)/2;
-var balconyY = (parseInt(buildingY)/balconyNumY)/2;
+    var scene = null;
+    var camera = null;
+    var renderer = null;
+    var canvas = null;
+    /*
+    * 大楼的参数设定
+    */    
+    var buildingX = 420;
+    var buildingY = 600;
+    var buildingZ = 100;
+    var balconyNum = Math.floor(parseInt(buildingX) / 100);
+    var balconyNumY = Math.floor(parseInt(buildingY) / 100);
+    var balconyXArray = Array();
+    var balconyYArray = Array();
+    for (var i = 0; i < balconyNum; i++) {
+        balconyXArray[i] = (((i+1)/balconyNum) - (1/(2*balconyNum)))*buildingX;
+    }
+    for (var i = 0; i < balconyNumY; i++) {
+        balconyYArray[i] = (((i+1)/balconyNumY) - (1/(2*balconyNumY)))*buildingY;
+    }
+    console.log('阳台X轴数组：'+balconyXArray);
+    console.log('阳台Y轴数组：'+balconyYArray);
+    var balconyX = (parseInt(buildingX)/balconyNum)/2;
+    var balconyY = (parseInt(buildingY)/balconyNumY)/2;
 
 
-console.log(balconyX);
-console.log(balconyY);
-console.log(balconyNum);
-console.log(balconyNumY);
+    console.log(balconyX);
+    console.log(balconyY);
+    console.log(balconyNum);
+    console.log(balconyNumY);
 
     $('.dropdown-toggle').dropdown();
     $(function () { 
@@ -136,6 +133,7 @@ console.log(balconyNumY);
             remoteCube();
         })
     });
+    //
     $('.problemsV').click(function(){
         var a = $(this).html();
         $('.titleName').html(a+" <span class='caret'></span>");
@@ -145,6 +143,7 @@ console.log(balconyNumY);
         $('.popoverT').popover('hide');
         $('popoverT').povover('destory');
     }
+
     init();
     animate();
 
@@ -187,62 +186,31 @@ console.log(balconyNumY);
         mesh.rotation.x = - Math.PI / 2;
         mesh.receiveShadow = true;
         scene.add( mesh );
-        //cube 大楼
+        //cube 大楼 head
         var geometry = new THREE.CubeGeometry( buildingX, buildingY, buildingZ, 1, 1, 1  );
-        var material1 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material2 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material3 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material4 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material5 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/zm_11.png"),transparent:true, opacity:0.8 } );
-        var material6 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-         
-        var materials = [material1, material2, material3, material4, material5, material6];
-         
-        var material = new THREE.MeshFaceMaterial( materials );
 
+        var material1 = new THREE.MeshBasicMaterial( { 
+        map: new THREE.TextureLoader().load("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material2 = new THREE.MeshBasicMaterial( { 
+        map: new THREE.TextureLoader().load("./image/zm_11.png"),transparent:true, opacity:0.8 } );
+        var material3 = new THREE.MeshBasicMaterial( { 
+        map: new THREE.TextureLoader().load("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material4 = new THREE.MeshBasicMaterial({ transparent:true, opacity:0 });
+        var materials = [material1, material1, material3, material3, material2, material3];
+        var material = new THREE.MeshFaceMaterial( materials );
         cubeM = new THREE.Mesh( geometry, material );
         cubeM.position.set(0,buildingY/2,0);
         scene.add( cubeM );
-
+        //cube 大楼 Middle
         var geometry = new THREE.CubeGeometry(buildingX-100,buildingY,buildingZ/2,1,1,1);
-        var material1 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material2 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material3 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material4 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material5 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/back_.jpg"),transparent:true, opacity:1 } );
-        var material6 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/back_.jpg"),transparent:true, opacity:1 } );
-        var materials = [material1, material2, material3, material4, material5, material6];
+        var materials = [material1, material1, material3, material3, material4, material4];
         var material = new THREE.MeshFaceMaterial( materials );        
         cubeMiddle = new THREE.Mesh( geometry,material );
         cubeMiddle.position.set(0,buildingY/2,-(3*buildingZ/4) );
         scene.add( cubeMiddle );
-
+        //cube 大楼 Bottom
         var geometry = new THREE.CubeGeometry(buildingX,buildingY,buildingZ,1,1,1);
-        var material1 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material2 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
-        var material3 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material4 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material5 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var material6 = new THREE.MeshBasicMaterial( { 
-        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
-        var materials = [material1, material2, material3, material4, material5, material6];
+        var materials = [material1, material1, material3, material3, material3, material3];
         var material = new THREE.MeshFaceMaterial( materials );        
         cubeBootom = new THREE.Mesh( geometry,material );
         cubeBootom.position.set(0,buildingY/2,-(3*buildingZ/2) );
@@ -272,7 +240,6 @@ console.log(balconyNumY);
             cube.position.x= balconyX - 0.5*buildingX;
             cube.position.y= balconyY -20;
             cube.position.z=-(2*buildingZ+40);
-            console.log(0);
             scene.add( cube );
             //阳台-left
             var geometry = new THREE.CubeGeometry( 5,40,40 );
@@ -284,8 +251,6 @@ console.log(balconyNumY);
             cube.position.x=balconyX - 0.5*buildingX - 32.5;
             cube.position.y= balconyY -20;
             cube.position.z=-(2*buildingZ+20); 
-            console.log(1);
-
             scene.add( cube );
             //阳台-right
             var geometry = new THREE.CubeGeometry( 5,40,40 );
@@ -297,8 +262,6 @@ console.log(balconyNumY);
             cube.position.x=balconyX - 0.5*buildingX + 32.5;
             cube.position.y= balconyY -20;
             cube.position.z=-(2*buildingZ+20);
-            console.log(2);
-
             scene.add( cube );
             //阳台-far
             var geometry = new THREE.CubeGeometry( 70,5,40 );
@@ -310,15 +273,48 @@ console.log(balconyNumY);
             cube.position.x=balconyX - 0.5*buildingX;
             cube.position.y= balconyY -37.5;
             cube.position.z=-(2*buildingZ+20);
-            console.log(3);
-
             scene.add( cube );            
         }
-
+        //调用addBakcony 创建阳台
         addBalcony(balconyNum);
+        //楼顶 三角盖
+        function drawShape(){
+            var shape = new THREE.Shape();
+            shape.moveTo(0,0);
+            shape.lineTo(buildingZ/2,60);
+            shape.lineTo(buildingZ,0);
+            // shape.bezierCurveTo(15,25,25,200,200);
+            // shape.splineThru([
+            //     new THREE.Vector2(100,100),
+            //     new THREE.Vector2(150,150),
+            //     new THREE.Vector2(200,100),
+            // ]);
+            // shape.quadraticCurveTo(20,15,200,200);
+            // var hole = new THREE.Path();
+            // hole.absarc(20,16,2,0,Math.PI,true);
+            // shape.holes.push(hole);
+            return shape;
+        }
+        var options = {
+            amount: buildingX,
+            bevelThickness: -10,
+            bevelSize: 1,
+            bevelSegments: 3,
+            bevelEnabled: true,
+            steps: 1
+        };
 
+        var geometry = new THREE.ExtrudeGeometry(drawShape(), options);
+        var material = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+        var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(buildingX/2,buildingY,-buildingZ/2);
+        cube.rotation.y = - 0.5 * Math.PI;
+        scene.add(cube);
 
-
+        var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(buildingX/2,buildingY,-2*buildingZ);
+        cube.rotation.y = -0.5 * Math.PI;
+        scene.add(cube);       
         //入口-left
         var geometry = new THREE.CubeGeometry( 5,45,40 );
         var material = new THREE.MeshBasicMaterial( { 
@@ -329,6 +325,7 @@ console.log(balconyNumY);
         cube.position.y=27.5;
         cube.position.z=70;            
         scene.add( cube );
+
         //入口-right
         var geometry = new THREE.CubeGeometry( 5,45,40 );
         var material = new THREE.MeshBasicMaterial( { 
@@ -355,13 +352,6 @@ console.log(balconyNumY);
             // var clock = new THREE.Clock();
             // var delta = clock.getDelta();
             // OrbitControls.update(delta);
-
-            //立方体
-            // var geometry = new THREE.BoxGeometry( 50, 50, 50 );
-            // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-            // box = new THREE.Mesh( geometry, material );
-            // scene.add( box );
-
             // var position = null;
             // box.position.set(100,100,100);
             // var tween = new TWEEN.Tween(box.position);
@@ -375,19 +365,6 @@ console.log(balconyNumY);
      
         window.addEventListener( 'resize', onWindowResize, false );
 
-        //贴图
-        var material = new THREE.MeshPhongMaterial({
-            ambient: 0x050505,
-            color: 0x0033ff,
-            specular: 0x555555,
-            shininess: 30
-        });
-        var material = new THREE.MeshPhongMaterial({
-            map: THREE.ImageUtils.loadTexture('http://wow.techbrood.com/uploads/1702/crate.jpg')
-        });
-
-        //console.log(scene);
-        renderer.render(scene,camera);
 	}
 
     //createMesh
@@ -407,8 +384,6 @@ console.log(balconyNumY);
     function changeColorPosition(Array){
         cubeArray = Array;  
     } 
-
-
 
     //createMesh 创建环境设备
     function createMesh(){
@@ -480,6 +455,7 @@ console.log(balconyNumY);
         }
         renderer.render(scene,camera);
     }
+
     //showProblems
     function showProblems(){
         console.log(cubeArray);
@@ -493,7 +469,8 @@ console.log(balconyNumY);
             addCube(x,y,z,c,n);
             console.log(i);
         }
-    };
+    }
+
     //addcub
     function addCube(x,y,z,c,n){
 
@@ -512,21 +489,8 @@ console.log(balconyNumY);
         tween.start();
         tween.repeat(20);
         console.log(n.scale);
-        //TWEEN.remove(tween);
-        //tween.to({x:1,y:1,z:1},2000);
-        //console.log(scene);
-        // var spotLight  =new THREE.spotLight(0xffffff);
-        // spotLight.target = cube;
-        // spotLight.castShadow = true;
-        // spotLight.position.set(scene.position);
-        // scene.add(spotLight);
-        // createMesh(img0);
-        // console.log(mesh);
-        // mesh.position.set(x+10,y+10,z+10);
-        // scene.add(mesh);
-        //cube.position.x += 0.01; 
-        //requestAnimationFrame(addCube);
-    };
+
+    }
 
     function onWindowResize() {
      
@@ -548,21 +512,13 @@ console.log(balconyNumY);
      
         if ( intersects.length > 0 ) {
                      
-            // 点击立方体时，将立方体变为红色
-            //box.material.color.setHex( 0xff0000 );
-            console.log('ok');
             var e = window.event;
             var screenX = e.clientX;
             var screenY = e.clientY;
             showPopover(screenX,screenY);
-            console.log('???');
         } else {
-                     
-            // 如果没有点击到，则将立方体变回绿色
-            //box.material.color.setHex( 0x00ff00 );
+
             console.log('false');
-            // var e = window.event;
-            // return {'x':e.screenX,'y':screenY} ;
         }
     }   
     
@@ -591,28 +547,10 @@ console.log(balconyNumY);
         render();
     }    
     function render(){
-        // requestAnimationFrame(render);
         //cube.rotation.z += 0.00;
         renderer.render(scene, camera);
         TWEEN.update();
     }	
-
-    // function flashing(event){
-        //     i++;
-        //     console.log(i);
-        //     if (i%2 == '1') {
-        //         var scaleX = 2;
-        //         var scaleY = 2;
-        //         var scaleZ = 2;
-
-        //     } else{
-        //         var scaleX = 0.5;
-        //         var scaleY = 0.5;
-        //         var scaleZ = 0.5;            
-        //     }
-        //     event.rotation.x += 0.02;
-        //     event.scale.set(scaleX,scaleY,scaleZ);
-    // }
 
 	</script>
 </body>
