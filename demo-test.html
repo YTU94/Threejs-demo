@@ -32,13 +32,13 @@
     <div id="controls-problems" class="problems">
             <div class="row">
               <div class="col-xs-2">
-                <input type="text" id="input-x" class="form-control" value="" placeholder=".col-xs-2">
+                <input type="text" id="input-x" class="form-control" value="" placeholder="输入X坐标">
               </div>
               <div class="col-xs-2">
-                <input type="text" id="input-y" class="form-control" value="65" placeholder=".col-xs-3"  value="65" onfocus="if (value =='65){value =''}" onblur="if (value ==''){value='65}">
+                <input type="text" id="input-y" class="form-control" value="65" placeholder="想让它上天吗"  value="65" onfocus="if (value =='65){value =''}" onblur="if (value ==''){value='65}">
               </div>
               <div class="col-xs-2">
-                <input type="text" id="input-z" class="form-control" value="" placeholder=".col-xs-4">
+                <input type="text" id="input-z" class="form-control" value="" placeholder="输入Y坐标">
               </div>
             </div>
 
@@ -208,8 +208,45 @@ console.log(balconyNumY);
 
         cubeM = new THREE.Mesh( geometry, material );
         cubeM.position.set(0,buildingY/2,0);
-
         scene.add( cubeM );
+
+        var geometry = new THREE.CubeGeometry(buildingX-100,buildingY,buildingZ/2,1,1,1);
+        var material1 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material2 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material3 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material4 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material5 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/back_.jpg"),transparent:true, opacity:1 } );
+        var material6 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/back_.jpg"),transparent:true, opacity:1 } );
+        var materials = [material1, material2, material3, material4, material5, material6];
+        var material = new THREE.MeshFaceMaterial( materials );        
+        cubeMiddle = new THREE.Mesh( geometry,material );
+        cubeMiddle.position.set(0,buildingY/2,-(3*buildingZ/4) );
+        scene.add( cubeMiddle );
+
+        var geometry = new THREE.CubeGeometry(buildingX,buildingY,buildingZ,1,1,1);
+        var material1 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material2 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/cm_11.png"),transparent:true, opacity:0.8 } );
+        var material3 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material4 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material5 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var material6 = new THREE.MeshBasicMaterial( { 
+        map: THREE.ImageUtils.loadTexture("./image/bm_11.png"),transparent:true, opacity:0.8 } );
+        var materials = [material1, material2, material3, material4, material5, material6];
+        var material = new THREE.MeshFaceMaterial( materials );        
+        cubeBootom = new THREE.Mesh( geometry,material );
+        cubeBootom.position.set(0,buildingY/2,-(3*buildingZ/2) );
+        scene.add( cubeBootom );     
         //添加阳台
         function addBalcony(balconyNum,balconyNumY){
             //var numbers = parseInt(balconyNum);
@@ -234,7 +271,7 @@ console.log(balconyNumY);
             cube = new THREE.Mesh( geometry, material );
             cube.position.x= balconyX - 0.5*buildingX;
             cube.position.y= balconyY -20;
-            cube.position.z=-92.5;
+            cube.position.z=-(2*buildingZ+40);
             console.log(0);
             scene.add( cube );
             //阳台-left
@@ -246,7 +283,7 @@ console.log(balconyNumY);
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX - 32.5;
             cube.position.y= balconyY -20;
-            cube.position.z=-70; 
+            cube.position.z=-(2*buildingZ+20); 
             console.log(1);
 
             scene.add( cube );
@@ -259,7 +296,7 @@ console.log(balconyNumY);
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX + 32.5;
             cube.position.y= balconyY -20;
-            cube.position.z=-70;
+            cube.position.z=-(2*buildingZ+20);
             console.log(2);
 
             scene.add( cube );
@@ -272,7 +309,7 @@ console.log(balconyNumY);
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX;
             cube.position.y= balconyY -37.5;
-            cube.position.z=-70;
+            cube.position.z=-(2*buildingZ+20);
             console.log(3);
 
             scene.add( cube );            
