@@ -14,30 +14,37 @@
     </div>
     <script>
         threeJs.init({
-            buildingXNumber : "2",//建筑单元，默认1
-            buildingYNumber : "4",//建筑楼层，默认1
+            buildingXNumber : "5",//建筑单元，默认1
+            buildingYNumber : "5",//建筑楼层，默认1
             buildingX : "100",//建筑长度，默认100
             buildingY : "80",//建筑高度，默认100
             buildingZ: "80",//建筑宽度，默认100
-            haveRoof : "0",//建筑是否有屋顶，默认true
+            haveRoof : "1",//建筑是否有屋顶，默认true
         });
-        threeJs.addCrack({});
+        threeJs.addCrack({
+            buildingY: "80",
+            buildingZ : "80",
+            buildingXNumber : "5",
+            buildingYNumber : "5",
+        });
         threeJs.addCrack({
             unit : "2",//建筑单元，默认1
             floor : "2",//建筑楼层，默认1
-            face : "5",//建筑面向，默认1(正面，顺时针旋转2,3,4面,房顶面5)
+            face : "2",//建筑面向，默认1(正面，顺时针旋转2,3,4面,房顶面5)
             size : "0.1",//裂缝间隙，默认0.1
             facePiece : "100",//墙面划分块数 默认100*100
             position : ['49','49'],//裂缝所出位置
             buildingX : "100",//建筑长度，默认100
             buildingY : "80",//建筑高度，默认100
             buildingZ : "80",//建筑宽度，默认100
+            buildingXNumber : "5",//建筑X轴数目，默认2
+            buildingYNumber: "5",//建筑Y轴层数，默认为6
             crackX : "10",//裂缝X周走向，默认10
-            crackY : "10",//裂缝Y轴走向，默认10
+            crackY : "10"//裂缝Y轴走向，默认10
         });
                 
         threeJs.addCrack({
-            unit : "2",
+            unit : "3",
             floor : "3",
             face : "3",
             size : "0.15",
@@ -46,11 +53,13 @@
             buildingX : "100",
             buildingY : "80",
             buildingZ : "80",
+            buildingXNumber : "5",
+            buildingYNumber: "5",
             crackX : "0",
             crackY : "10",
         });        
         threeJs.addCrack({
-            unit : "2",
+            unit : "4",
             floor : "4",
             face : "4",
             size : "0.3",
@@ -59,19 +68,23 @@
             buildingX : "100",
             buildingY : "80",
             buildingZ : "80",
+            buildingXNumber : "5",
+            buildingYNumber: "5",
             crackX : "10",
             crackY : "0",
         });
         threeJs.addCrack({
-            unit : "2",
-            floor : "4",
-            face : "2",
+            unit : "5",
+            floor : "5",
+            face : "5",
             size : "0.3",
             facePiece : "100",
             position : ['49','49'],
             buildingX : "100",
             buildingY : "80",
             buildingZ : "80",
+            buildingXNumber : "5",
+            buildingYNumber: "5",
             crackX : "10",
             crackY : "0",
         });
