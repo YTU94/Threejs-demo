@@ -174,7 +174,7 @@
 		light.castShadow = true;
 		scene.add(light);
 		//plane
-        var groundTexture = THREE.ImageUtils.loadTexture( "./image/back_2.jpg" );
+        var groundTexture = THREE.ImageUtils.loadTexture( "../../image/back_2.jpg" );
         groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
         groundTexture.repeat.set( 25, 25 );
         groundTexture.anisotropy = 16;
@@ -278,6 +278,7 @@
         //调用addBakcony 创建阳台
         addBalcony(balconyNum);
         //楼顶 三角盖
+        
         function drawShape(){
             var shape = new THREE.Shape();
             shape.moveTo(0,0);
@@ -303,9 +304,10 @@
             bevelEnabled: true,
             steps: 1
         };
+        // var crackTexture = new THREE.TextureLoader().load("./image/back_1.jpg");
 
         var geometry = new THREE.ExtrudeGeometry(drawShape(), options);
-        var material = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+        var material = new THREE.MeshBasicMaterial({ color: 0xaaaaaa,});
         var cube = new THREE.Mesh(geometry, material);
         cube.position.set(buildingX/2,buildingY,-buildingZ/2);
         cube.rotation.y = - 0.5 * Math.PI;
@@ -422,7 +424,8 @@
         var Material = new THREE.MeshBasicMaterial({
             transparent: true,
             color: 0xaaaaaa
-        });          
+        });     
+             
         var Geometry = new THREE.CylinderGeometry(20,20,4,20,1);
         var meshCylinder = new THREE.Mesh(Geometry,Material);
         var y1 = parseInt(y)-62.5;
