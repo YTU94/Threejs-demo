@@ -5,4 +5,4 @@ Some demos for Three.js
 
 >2.cd /当前目录下
 
->3. http-server (基于nodejs平台)
+>3.http-server (基于nodejs平台)
