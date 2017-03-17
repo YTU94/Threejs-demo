@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+    <div id="space"></div>  
+    <script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+    <script src="./lib/three.min.js"></script>
+    <script src="./lib/MTLLoader.js"></script>
+    <script src="./lib/OBJLoader.js"></script>
+    <script src="./lib/OrbitControls.js"></script>
+    <script>
+
+
+        var container, stats;
+
+        var camera, scene, renderer;
+
+        var mouseX = 0, mouseY = 0;
+
+        var windowHalfX = window.innerWidth / 2;
+        var windowHalfY = window.innerHeight / 2;
+
+
+        init();
+        animate();
+        var mesh;
+
+        function init() {
+
+            container = document.getElementById("space")
+            camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 8000 );
+            camera.position.set(0, 150, 1400);
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+
+            var ambient = new THREE.AmbientLight( 0x555555 );
+            scene.add( ambient );
+
+         //axes
+         var axes = new THREE.AxisHelper( 20000 );
+         scene.add(axes);
+        //light
+        var light = new THREE.PointLight(0x888888, 1.25);
+        light.position.set(0, 200, 100);
+        light.position.multiplyScalar(5);
+        light.castShadow = true;
+        scene.add(light);
+        //plane
+        var groundTexture = THREE.ImageUtils.loadTexture( "../../image/back_2.jpg" );
+        groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat.set( 25, 25 );
+        groundTexture.anisotropy = 16;
+
+        var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, map: groundTexture } );
+
+        var mesh = new THREE.Mesh( new THREE.PlaneGeometry( 20000, 20000 ), groundMaterial );
+        mesh.position.y = -0;
+        mesh.rotation.x = - Math.PI / 2;
+        mesh.receiveShadow = true;
+        scene.add( mesh );
+
+  
+            createMtlObj({
+                mtlBaseUrl:"./image/",
+                mtlPath: "./image/",
+                mtlFileName:"19.mtl",
+                objPath:"./image/",
+                objFileName:"19.obj",
+                completeCallback:function(object){
+                    object.traverse(function(child) { 
+                        if (child instanceof THREE.Mesh) { 
+                            child.material.side = THREE.DoubleSide;//设置贴图模式为双面贴图
+                            // child.material.emissive.r=0.00;//设置rgb通道R通道颜色
+                            // child.material.emissive.g=0.01;//设置rgb通道G通道颜色
+                            // child.material.emissive.b=0.05;//设置rgb通道B通道颜色
+                            // child.material.transparent=true;//材质允许透明
+                            // child.material.opacity=0;//材质默认透明度                        
+                            // child.material.shading=THREE.SmoothShading;//平滑渲染
+                        }
+                    });       
+
+                    object.emissive=0xffffff;
+                    object.ambient=0xffffff;
+                    object.position.y = 1;
+                    object.position.z = 0;
+                    object.scale.x=10;
+                    object.scale.y=10;
+                    object.scale.z=10;
+                    object.name="haven";
+                    // object.rotation.y=-0.5*Math.PI;
+                    object.transparent = true;
+                    object.opacity = 0;
+                    console.log("数量"+object.children.length);
+                    console.log(object);
+                    // object.material.side = THREE.DoubleSide;
+                    scene.add(object);
+                },
+                progress:function(persent){
+
+                    $("#havenloading .progress").css("width",persent+"%");
+                },
+                error: function(obj){
+                    console.log(obj);
+                }
+            })
+            renderer = new THREE.WebGLRenderer({ antialiasing : true });
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            container.appendChild( renderer.domElement );
+
+        }
+
+        var controls = new THREE.OrbitControls(camera,container);
+
+
+        function createMtlObj(options){
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setBaseUrl( options.mtlBaseUrl );
+            mtlLoader.setPath( options.mtlPath );
+            mtlLoader.load( options.mtlFileName, 
+                function( materials ) {
+                    console.log(materials);
+                materials.preload();
+                // materials.map.side = THREE.DoubleSide;
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials( materials );
+                objLoader.setPath( options.objPath );
+                objLoader.load( options.objFileName, function ( object ) {
+                    if(typeof options.completeCallback=="function"){
+                        options.completeCallback(object);
+                    }
+                }, 
+                function ( xhr ) {
+                    if ( xhr.lengthComputable ) {
+                        var percentComplete = xhr.loaded / xhr.total * 100;
+                        if(typeof options.progress =="function"){
+                            options.progress( Math.round(percentComplete, 2));
+                        }
+                        //console.log( Math.round(percentComplete, 2) + '% downloaded' );
+                    }
+                }, 
+                function(error){
+                    console.log('error');
+                } );
+
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+            render();
+        }
+        function render() {
+
+            camera.lookAt( scene.position );
+            renderer.render( scene, camera );
+
+        }
+
+    </script>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+
+newmtl Quartz_Light_Brown
+Ka 0.000000 0.000000 0.000000
+Kd 0.780392 0.721569 0.596078
+Ks 0.330000 0.330000 0.330000
+map_Kd test3/Quartz_Light_Brown.jpg
+

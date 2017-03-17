@@ -1,0 +1,21 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Pavers_Square_Brick
+Ka 0.000000 0.000000 0.000000
+Kd 0.666667 0.321569 0.133333
+Ks 0.330000 0.330000 0.330000
+map_Kd test5/Pavers_Square_Brick.jpg
+
+newmtl Pavers_Driveway_Brick
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.509804 0.415686
+Ks 0.330000 0.330000 0.330000
+map_Kd test5/Pavers_Driveway_Brick.jpg
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+

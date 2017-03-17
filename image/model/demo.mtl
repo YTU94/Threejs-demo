@@ -1,0 +1,11 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Stone_Masonry_Multi
+Ka 0.000000 0.000000 0.000000
+Kd 0.858824 0.823529 0.772549
+Ks 0.330000 0.330000 0.330000
+d 0.900000
+map_Kd demo/Stone_Masonry_Multi.jpg
+

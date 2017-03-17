@@ -1,0 +1,16 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Formica_Laminate_Dark
+Ka 0.000000 0.000000 0.000000
+Kd 0.196078 0.207843 0.235294
+Ks 0.330000 0.330000 0.330000
+map_Kd test4/Formica_Laminate_Dark.jpg
+
+newmtl Quartz_Light_Brown
+Ka 0.000000 0.000000 0.000000
+Kd 0.780392 0.721569 0.596078
+Ks 0.330000 0.330000 0.330000
+map_Kd test4/Quartz_Light_Brown.jpg
+

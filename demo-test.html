@@ -6,6 +6,8 @@
 	<script src="./lib/three.min.js"></script>
     <script src="./lib/OrbitControls.js"></script> 
     <script src="./lib/Tween.js"></script> 
+    <script src="./lib/MTLLoader.js"></script>
+    <script src="./lib/OBJLoader.js"></script>   
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
@@ -124,6 +126,7 @@
 
     $('.dropdown-toggle').dropdown();
     $(function () { 
+
         $("[data-toggle='popover']").popover();
         $('.popoverT').on('shown.bs.popover',function(){
             showProblems();
@@ -201,20 +204,20 @@
         cubeM = new THREE.Mesh( geometry, material );
         cubeM.position.set(0,buildingY/2,0);
         scene.add( cubeM );
-        //cube 大楼 Middle
-        var geometry = new THREE.CubeGeometry(buildingX-100,buildingY,buildingZ/2,1,1,1);
-        var materials = [material1, material1, material3, material3, material4, material4];
-        var material = new THREE.MeshFaceMaterial( materials );        
-        cubeMiddle = new THREE.Mesh( geometry,material );
-        cubeMiddle.position.set(0,buildingY/2,-(3*buildingZ/4) );
-        scene.add( cubeMiddle );
-        //cube 大楼 Bottom
-        var geometry = new THREE.CubeGeometry(buildingX,buildingY,buildingZ,1,1,1);
-        var materials = [material1, material1, material3, material3, material3, material3];
-        var material = new THREE.MeshFaceMaterial( materials );        
-        cubeBootom = new THREE.Mesh( geometry,material );
-        cubeBootom.position.set(0,buildingY/2,-(3*buildingZ/2) );
-        scene.add( cubeBootom );     
+        // //cube 大楼 Middle
+        // var geometry = new THREE.CubeGeometry(buildingX-100,buildingY,buildingZ/2,1,1,1);
+        // var materials = [material1, material1, material3, material3, material4, material4];
+        // var material = new THREE.MeshFaceMaterial( materials );        
+        // cubeMiddle = new THREE.Mesh( geometry,material );
+        // cubeMiddle.position.set(0,buildingY/2,-(3*buildingZ/4) );
+        // scene.add( cubeMiddle );
+        // //cube 大楼 Bottom
+        // var geometry = new THREE.CubeGeometry(buildingX,buildingY,buildingZ,1,1,1);
+        // var materials = [material1, material1, material3, material3, material3, material3];
+        // var material = new THREE.MeshFaceMaterial( materials );        
+        // cubeBootom = new THREE.Mesh( geometry,material );
+        // cubeBootom.position.set(0,buildingY/2,-(3*buildingZ/2) );
+        // scene.add( cubeBootom );     
         //添加阳台
         function addBalcony(balconyNum,balconyNumY){
             //var numbers = parseInt(balconyNum);
@@ -239,7 +242,7 @@
             cube = new THREE.Mesh( geometry, material );
             cube.position.x= balconyX - 0.5*buildingX;
             cube.position.y= balconyY -20;
-            cube.position.z=-(2*buildingZ+40);
+            cube.position.z=-buildingZ+10;
             scene.add( cube );
             //阳台-left
             var geometry = new THREE.CubeGeometry( 5,40,40 );
@@ -250,7 +253,7 @@
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX - 32.5;
             cube.position.y= balconyY -20;
-            cube.position.z=-(2*buildingZ+20); 
+            cube.position.z=-buildingZ+30; 
             scene.add( cube );
             //阳台-right
             var geometry = new THREE.CubeGeometry( 5,40,40 );
@@ -261,7 +264,7 @@
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX + 32.5;
             cube.position.y= balconyY -20;
-            cube.position.z=-(2*buildingZ+20);
+            cube.position.z=-buildingZ+30;
             scene.add( cube );
             //阳台-far
             var geometry = new THREE.CubeGeometry( 70,5,40 );
@@ -272,7 +275,7 @@
             cube = new THREE.Mesh( geometry, material );
             cube.position.x=balconyX - 0.5*buildingX;
             cube.position.y= balconyY -37.5;
-            cube.position.z=-(2*buildingZ+20);
+            cube.position.z=-buildingZ+30;
             scene.add( cube );            
         }
         //调用addBakcony 创建阳台
@@ -313,10 +316,10 @@
         cube.rotation.y = - 0.5 * Math.PI;
         scene.add(cube);
 
-        var cube = new THREE.Mesh(geometry, material);
-        cube.position.set(buildingX/2,buildingY,-2*buildingZ);
-        cube.rotation.y = -0.5 * Math.PI;
-        scene.add(cube);       
+        // var cube = new THREE.Mesh(geometry, material);
+        // cube.position.set(buildingX/2,buildingY,-2*buildingZ);
+        // cube.rotation.y = -0.5 * Math.PI;
+        // scene.add(cube);       
         //入口-left
         var geometry = new THREE.CubeGeometry( 5,45,40 );
         var material = new THREE.MeshBasicMaterial( { 
@@ -366,7 +369,46 @@
         document.getElementById('MainCanvas').addEventListener( 'mousedown', onMouseDown, false );
      
         window.addEventListener( 'resize', onWindowResize, false );
+        //UV 定制
+        var material = new THREE.MeshPhongMaterial({
+            map: new  THREE.TextureLoader().load("./image/door.png"),
+            transparent : true,
+            opacity: 0.8
+        });
+var bricks = [new THREE.Vector2(0, .666), new THREE.Vector2(.5, .666), new THREE.Vector2(.5, 1), new THREE.Vector2(0, 1)];
+var clouds = [new THREE.Vector2(.5, .666), new THREE.Vector2(1, .666), new THREE.Vector2(1, 1), new THREE.Vector2(.5, 1)];
+var crate = [new THREE.Vector2(0, .333), new THREE.Vector2(.5, .333), new THREE.Vector2(.5, .666), new THREE.Vector2(0, .666)];
+var stone = [new THREE.Vector2(.5, .333), new THREE.Vector2(1, .333), new THREE.Vector2(1, .666), new THREE.Vector2(.5, .666)];
+var water = [new THREE.Vector2(0, 0), new THREE.Vector2(.5, 0), new THREE.Vector2(.5, .333), new THREE.Vector2(0, .333)];
+var wood = [new THREE.Vector2(.5, 0), new THREE.Vector2(1, 0), new THREE.Vector2(1, .333), new THREE.Vector2(.5, .333)];
 
+        var geometry = new THREE.CubeGeometry(100,100,100); 
+        geometry.faceVertexUvs[0] = [];
+        geometry.faceVertexUvs[0][0] = [ bricks[0], bricks[1], bricks[3] ];
+        geometry.faceVertexUvs[0][1] = [ bricks[1], bricks[2], bricks[3] ];
+          
+        geometry.faceVertexUvs[0][2] = [ clouds[0], clouds[1], clouds[3] ];
+        geometry.faceVertexUvs[0][3] = [ clouds[1], clouds[2], clouds[3] ];
+          
+        geometry.faceVertexUvs[0][4] = [ crate[0], crate[1], crate[3] ];
+        geometry.faceVertexUvs[0][5] = [ crate[1], crate[2], crate[3] ];
+          
+        geometry.faceVertexUvs[0][6] = [ stone[0], stone[1], stone[3] ];
+        geometry.faceVertexUvs[0][7] = [ stone[1], stone[2], stone[3] ];
+          
+        geometry.faceVertexUvs[0][8] = [ water[0], water[1], water[3] ];
+        geometry.faceVertexUvs[0][9] = [ water[1], water[2], water[3] ];
+          
+        geometry.faceVertexUvs[0][10] = [ wood[0], wood[1], wood[3] ];
+        geometry.faceVertexUvs[0][11] = [ wood[1], wood[2], wood[3] ];
+
+        var mesh = new THREE.Mesh( geometry , material);
+        mesh.position.set(0,200,150);
+        mesh.rotation.x = - 1*Math.PI;
+        mesh.rotation.y = - 1 * Math.PI;
+        scene.add(mesh);
+        console.log("mesh:"+mesh);
+        console.log(mesh);
 	}
 
     //createMesh
@@ -385,6 +427,7 @@
     //changeColoPosition
     function changeColorPosition(Array){
         cubeArray = Array;  
+        console.log(cubeArray);
     } 
 
     //createMesh 创建环境设备
@@ -468,9 +511,9 @@
             var z = cubeArray[i][2];
             var c = cubeArray[i][3];
             var n = 'cube'+i;
-            console.log(x+'|'+y+'|'+z+'|'+c);
+            // console.log(x+'|'+y+'|'+z+'|'+c);
             addCube(x,y,z,c,n);
-            console.log(i);
+            // console.log(i);
         }
     }
 
@@ -491,7 +534,7 @@
         tween.to({x:1.5,y:1.5,z:1.5},200);
         tween.start();
         tween.repeat(20);
-        console.log(n.scale);
+        console.log("结果是"+n.scale);
 
     }
 
@@ -543,6 +586,25 @@
     function closeP(){
         $('.Popover').hide();
     }
+    var materials = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setBaseUrl( './image/');
+    mtlLoader.setPath( './image/' );
+    mtlLoader.load( test3.mtl, function( materials ) {
+        materials.preload();
+
+        // model
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath('./image');
+        objLoader.load( test3.obj, function ( object ) {
+            object.position.y = - 95;
+            scene.add( object );
+            target_obj = object;
+
+        }, onProgress, onError );
+
+    });
 
     function animate(){
         requestAnimationFrame( animate );
