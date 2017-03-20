@@ -39,59 +39,16 @@
 
             <div class="row container text-right" style="padding-left: 15px;">
     
-                <button type="button" class="btn btn-primary" onclick="inclinationModel.addAnimate(inclinationModel.cubes)">倾角传感器</button>
-                <button type="button" class="btn btn-primary" onclick="crackModel.addAnimate(crackModel.cubes)">裂缝传感器</button>
-                <button type="button" class="btn btn-primary" onclick="beidouModel.addAnimate(beidouModel.cubes)">北斗天线</button>
-                <button type="button" class="btn btn-success" onclick="settlementModel.addAnimate(settlementModel.cubes)">沉降传感器</button>                
+                <button type="button" class="btn btn-primary" onclick="addAnimate(inclinationModel.cubes)">倾角传感器</button>
+                <button type="button" class="btn btn-primary" onclick="addAnimate(crackModel.cubes)">裂缝传感器</button>
+                <button type="button" class="btn btn-primary" onclick="addAnimate(beidouModel.cubes)">北斗天线</button>
+                <button type="button" class="btn btn-success" onclick="addAnimate(settlementModel.cubes)">沉降传感器</button>                
             </div>
 
     </div>
  
     <script type="text/javascript">
-        threeJs.init({
-            buildingXNumber : "4",//建筑单元，默认1
-            buildingYNumber : "6",//建筑楼层，默认1
-            haveRoof : "1",//建筑是否有屋顶，默认true
-        });
-        //裂缝传感器
-        crackModel.addCrack({
-            unit : "1",//建筑单元，默认1
-            floor : "1",//建筑楼层，默认1
-            face : "1",//建筑面向，默认1(正面，顺时针旋转2,3,4面,房顶面5)
-            size: "0.3",//裂缝尺寸
-            position : ['49',49],//裂缝位置信息
-            crackX : "10",//裂缝X周走向，默认10
-            crackY : "10"//裂缝Y轴走向，默认10
-        });
-        //倾角传感器    
-        inclinationModel.addCrack({
-            unit : "2",
-            floor : "3",
-            face : "3",
-            position : ['49','49'],
-        });  
-        //沉降传感器      
-        settlementModel.addCrack({
-            unit : "3",
-            floor : "4",
-            face : "4",
-            position : ['49','49'],
 
-        });
-        //北斗天线
-        beidouModel.addCrack({
-            unit : "4",
-            face : "5",
-            position : ['49','49'],
-        });
-
-        // var promise = $http({
-        //     method: 'GET',
-        //     url: '/lib/building.json'
-        // });
-        // console.log(promise);
-//放在最后执行
-animate();
     </script> 
   </body>
   </html>  
