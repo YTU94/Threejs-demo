@@ -1,0 +1,19 @@
+{
+	"house":{"floor":"6","unit":"2","roof":1},
+	"crack":[
+		{"id":"","name":"","floor":"1","room":"1","wall":"1","x":"10","y":"10","valeu":"0.1","directX":"","directY":""},
+		{"id":"","name":"","floor":"1","room":"2","wall":"2","x":"49","y":"49","valeu":"0.1","directX":"","directY":""}
+	],
+	"inclinator":[
+		{"id":"","name":"","floor":"2","room":"1","wall":"1","x":"10","y":"10"},
+		{"id":"","name":"","floor":"2","room":"2","wall":"2","x":"49","y":"49"}
+	],
+	"level":[
+		{"id":"","name":"","floor":"3","room":"1","wall":"1","x":"10","y":"10"},
+		{"id":"","name":"","floor":"3","room":"2","wall":"2","x":"49","y":"49"}
+	],
+	"gps":[
+		{"id":"","name":"","floor":"4","room":"1","wall":"5","x":"10","y":"10"},
+		{"id":"","name":"","floor":"4","room":"2","wall":"5","x":"49","y":"49"}
+	]
+}

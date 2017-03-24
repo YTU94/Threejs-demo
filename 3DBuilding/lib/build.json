@@ -1,0 +1,12 @@
+	        var geometry = new THREE.CylinderGeometry(buildingY*0.577,buildingY*0.577,parseInt(buildingX)*buildingXNumber*1.5,3,1,false);
+            var material = new THREE.MeshBasicMaterial({
+                color:0xe9e9e9,
+                transparent : true,
+                // map: new THREE.TextureLoader().load("./image/qiang_0.jpg"),
+                opacity: 0.4
+            });
+	        var cube = new THREE.Mesh( geometry , material );
+	        cube.position.set(0,parseInt(buildingY*buildingYNumber)/2 + parseInt(buildingY)*0.288,parseInt(buildingY)*0.5);
+            cube.rotation.x =   Math.PI/6;
+            cube.rotation.z = 0.5*Math.PI;
+	        scene.add(cube);

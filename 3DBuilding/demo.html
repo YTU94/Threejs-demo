@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+  <html ng-app lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Test</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        
+    <script type="text/javascript" src="./lib/three.min.js"></script>
+    <script type="text/javascript" src="./lib/OrbitControls.js"></script> 
+    <script type="text/javascript" src="./lib/Tween.js"></script>       
+    <script src="https://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script type="text/javascript" src="./lib/threeDemo.js"></script> 
+
+<style>
+.canvas{ position: relative;  z-index: 10003;}
+.contents{position: absolute;top: 100px;  left: 60%; z-index: 10004;  }
+.popover{position: absolute;z-index: 10005;}
+.problems{position: absolute; top: 100px;right: 100px; z-index: 10005;}
+.top{top:10px !important; width: 300px; height: 200px; overflow: hidden;}
+.pop{display: none;}
+</style>  
+
+  </head>
+  <body>
+<div >
+<!--   <p>名字 : <input type="text" ng-model="name"></p>
+<h1>Hello {{name}}</h1>
+</div> -->
+
+    <div id="canvas" class="canvas">
+        <canvas id="MainCanvas" width="100%" height="100%"></canvas>
+    </div>
+
+    <div id="controls-problems" class="problems text-right" style="float: right;top:210px;">
+
+        <table class="table table-bordered " style="width: 400px;float: right; background: #fff">
+
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>Name</th>
+                    <th>设备号</th>
+                    <th>状态</th>
+                    <th>值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr onclick="addAnimate(beidouModel.cubes,0)" class="popoverM" title="北斗"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="auto" 
+            data-content="<h3>北斗0</h3><img src='./image/louti_1.png' alt='' width='100px' height='100px'>" >
+                    <td>001</td>
+                    <td>北斗</td>
+                    <td>560001</td>
+                    <td>危险</td>
+                    <td></td>
+                </tr>
+                <tr onclick="addAnimate(beidouModel.cubes,1)" class="popoverM" title="北斗1"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="auto" 
+            data-content="<h3>北斗1</h3><img src='./image/louti_1.png' alt='' width='100px' height='100px'>">
+                    <td>001</td>
+                    <td>北斗</td>
+                    <td>560001</td>
+                    <td>危险</td>
+                    <td></td>
+                </tr>
+                <tr onclick="addAnimate(inclinationModel.cubes,0)" class="popoverM" title="倾斜"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="auto" 
+            data-content="倾斜<img src='./image/louti_1.png' alt='' width='100px' height='100px'>">
+                    <td>001</td>
+                    <td>倾斜</td>
+                    <td>560001</td>
+                    <td>危险</td>
+                    <td></td>
+                </tr>
+                <tr onclick="addAnimate(settlementModel.cubes,0)" class="popoverM" title=沉降"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="auto" 
+            data-content="沉降介绍<img src='./image/louti_1.png' alt='' width='100px' height='100px'>">
+                    <td>001</td>
+                    <td>澄江</td>
+                    <td>560001</td>
+                    <td>危险</td>
+                    <td></td>
+                </tr>
+                <tr onclick="opacityAnimate(crackModel.cubes,0)" class="popoverM" title="裂缝"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="auto" 
+            data-content="左侧的 Popover 中的一些内容<h3>裂缝</h3><img src='./image/louti_1.png' alt='' width='100px' height='100px'>">
+                    <td>001</td>
+                    <td>裂缝</td>
+                    <td>560001</td>
+                    <td>危险</td>
+                    <td>0.03mm</td>
+                </tr>                
+            </tbody>
+        </table>
+        <!-- <div class="row container text-right" style="padding-left: 15px;">
+            <button type="button" class="btn btn-primary" title="Popover title"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="bottom" 
+            data-content="左侧的 Popover 中的一些内容<h1>keyima</h1>" onclick="addAnimate(inclinationModel.cubes)">倾角传感器</button>
+                <button type="button" class="btn btn-primary" title="Popover title"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="bottom" 
+            data-content="左侧的 Popover 中的一些内容<h1>keyima</h1>" onclick="addAnimate(crackModel.cubes)">裂缝传感器</button>
+                <button type="button" class="btn btn-primary" title="Popover title"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="bottom" 
+            data-content="左侧的 Popover 中的一些内容<h1>keyima</h1>" onclick="addAnimate(beidouModel.cubes)">北斗天线</button>
+                <button type="button" class="btn btn-success" title="Popover title"  
+            data-container="body" data-toggle="popover" data-html="true" data-placement="bottom" 
+            data-content="左侧的 Popover 中的一些内容<h1>keyima</h1>" onclick="addAnimate(settlementModel.cubes)">沉降传感器</button>                
+        </div> -->
+
+    </div>
+ 
+    <script type="text/javascript">
+        $("[data-toggle='popover']").popover();
+
+    
+        $('.popoverM').on('hide.bs.popover', function () {
+            var cont =  $('body').find(".top");
+            console.log(cont);
+
+            for (var i = 0; i < cont.length; i++) {
+                if( cont.length == 1){
+                    return;
+                }else{
+                    console.log(cont[i]);
+                cont[i].remove();
+                }
+            }
+        })
+        // threeJs.init({
+        //     buildingXNumber : "4",//建筑单元，默认1
+        //     buildingYNumber : "6",//建筑楼层，默认1
+        //     haveRoof : "1",//建筑是否有屋顶，默认true
+        // });
+        //裂缝传感器
+        // crackModel.addCrack({
+        //     unit : "1",//建筑单元，默认1
+        //     floor : "1",//建筑楼层，默认1
+        //     face : "1",//建筑面向，默认1(正面，顺时针旋转2,3,4面,房顶面5)
+        //     size: "0.3",//裂缝尺寸
+        //     position : ['49',49],//裂缝位置信息
+        //     crackX : "10",//裂缝X周走向，默认10
+        //     crackY : "10"//裂缝Y轴走向，默认10
+        // });
+        // //倾角传感器    
+        // inclinationModel.addCrack({
+        //     unit : "2",
+        //     floor : "3",
+        //     face : "3",
+        //     position : ['49','49'],
+        // });  
+        // //沉降传感器      
+        // settlementModel.addCrack({
+        //     unit : "3",
+        //     floor : "4",
+        //     face : "4",
+        //     position : ['49','49'],
+
+        // });
+        // //北斗天线
+        // beidouModel.addCrack({
+        //     unit : "4",
+        //     face : "5",
+        //     position : ['49','49'],
+        // });
+        // beidouModel.addCrack({
+        //     unit : "2",
+        //     face : "5",
+        //     position : ['49','49'],
+        // });        
+        // beidouModel.addCrack({
+        //     unit : "1",
+        //     face : "5",
+        //     position : ['49','49'],
+        // });
+        // var promise = $http({
+        //     method: 'GET',
+        //     url: '/lib/building.json'
+        // });
+        // console.log(promise);
+    //放在最后执行
+
+    </script> 
+  </body>
+  </html>  
