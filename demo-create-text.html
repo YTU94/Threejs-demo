@@ -2,31 +2,38 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>3.js测试六</title>
-  </head>
-  <body onload="init()">
-    <canvas id="mainCanvas" width="100%" height="100%" ></canvas>
+    <title>3D文字</title>
     <script src="./lib/three.min.js"></script>
+    <script type="text/javascript" src="./lib/OrbitControls.js"></script> 
+
+  </head>
+  <body >
+    <canvas id="mainCanvas" width="50%" height="50%" ></canvas>
     <script type="text/javascript">
+		var scene, camera, renderer;
+		var geometry, material, mesh;
+		init();
+		animate();
       function init() {
 			//renderer
-        var renderer = new THREE.WebGLRenderer({
+ 		renderer = new THREE.WebGLRenderer({
           canvas: document.getElementById('mainCanvas')
         });
         renderer.setClearColor(0x000000);
         renderer.setSize( window.innerWidth, window.innerHeight );
 		
 			//scene
-        var scene = new THREE.Scene();
+ 		scene = new THREE.Scene();
          
         // camera
-        var camera = new THREE.OrthographicCamera(-2.5, 2.5, 1.875, -1.875, 0.1, 100);
+ 		camera = new THREE.OrthographicCamera(-2.5, 2.5, 1.875, -1.875, 0.1, 100);
         camera.position.set(5, 5, 20);
         camera.lookAt(new THREE.Vector3(1, 0, 0));
         scene.add(camera); 
+        var OrbitControls = new THREE.OrbitControls(camera,renderer.domElement);
          
         //金属发亮物体
-        var material = new THREE.MeshPhongMaterial({  
+ 		material = new THREE.MeshPhongMaterial({ 	 
           color: 0xffff00,
           specular:0xffff00,  
           //该材质的光亮程度及其高光部分的颜色，如果设置成和color属性相同的颜色，则会得到另一个更加类似金属的材质，如果设置成grey灰色，则看起来像塑料
@@ -42,9 +49,9 @@
         // load font
         var loader = new THREE.FontLoader();
         loader.load('./lib/helvetiker_regular.typeface.json', function(font) {
-          var mesh = new THREE.Mesh(new THREE.TextGeometry('Hello', {
+		 mesh = new THREE.Mesh(new THREE.TextGeometry('Hello', {
             font: font,
-            size: 1,
+            size: 0.5,
             height: 1
           }), material);
           scene.add(mesh);
@@ -53,6 +60,15 @@
           renderer.render(scene, camera);
         });
       }
-       
+		function animate() {
+
+			requestAnimationFrame( animate );
+
+			// mesh.rotation.x += 0.01;
+			// mesh.rotation.y += 0.02;
+			// console.log(renderer);
+			renderer.render( scene, camera );
+
+		}
     </script>
 </html>

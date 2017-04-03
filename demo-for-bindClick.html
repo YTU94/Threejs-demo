@@ -11,6 +11,7 @@
         
     </div>
     <script src="./lib/three.min.js"></script>
+    <script type="text/javascript" src="./lib/OrbitControls.js"></script> 
 
     <script>
         var camera, scene, renderer;
@@ -57,6 +58,9 @@
             container.addEventListener( 'mousedown', onMouseDown, false );
          
             window.addEventListener( 'resize', onWindowResize, false );
+            
+            var OrbitControls = new THREE.OrbitControls(camera,renderer.domElement);
+
          
         }
          
@@ -92,7 +96,7 @@
         }
          
         function animate() {
-         
+            
             requestAnimationFrame( animate );
             render();
          

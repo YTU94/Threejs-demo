@@ -11,6 +11,8 @@
     <canvas id="mainCanvas" width="1000px" height="1000px" ></canvas>
     <script src="./lib/three.min.js"></script>    
     <script src="./lib/dat.gui.min.js"></script>    
+    <script src="./lib/OrbitControls.js"></script> 
+
     <script>
     var cube = null;
 //var scene = null;
@@ -35,6 +37,8 @@
             camera.position.set(-30, 40, 30);
             camera.lookAt(scene.position);
             scene.add(camera);
+
+            var OrbitControls = new THREE.OrbitControls(camera,renderer.domElement);
 
             //add light
             var light = new THREE.PointLight(0xffffff,1,1000);
