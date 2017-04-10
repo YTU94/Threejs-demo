@@ -170,14 +170,15 @@
          //axes
          var axes = new THREE.AxisHelper( 20000 );
          scene.add(axes);
-		//light
-		var light = new THREE.PointLight(0xdfebf0, 1.25);
-		light.position.set(0, 200, 100);
-		light.position.multiplyScalar(5);
-		light.castShadow = true;
-		scene.add(light);
-		//plane
-        var groundTexture = THREE.ImageUtils.loadTexture( "../../image/back_2.jpg" );
+        //light
+        var light = new THREE.PointLight(0xdfebf0, 1.25);
+        light.position.set(0, 200, 100);
+        light.position.multiplyScalar(5);
+        light.castShadow = true;
+        scene.add(light);
+
+        //plane
+        var groundTexture = new THREE.TextureLoader().load( "./image/back_2.jpg" );
         groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
         groundTexture.repeat.set( 25, 25 );
         groundTexture.anisotropy = 16;
@@ -370,45 +371,46 @@
      
         window.addEventListener( 'resize', onWindowResize, false );
         //UV 定制
+        var geometry = new THREE.CubeGeometry(100, 100, 100);
+
         var material = new THREE.MeshPhongMaterial({
-            map: new  THREE.TextureLoader().load("./image/door.png"),
-            transparent : true,
-            opacity: 0.8
-        });
-var bricks = [new THREE.Vector2(0, .666), new THREE.Vector2(.5, .666), new THREE.Vector2(.5, 1), new THREE.Vector2(0, 1)];
-var clouds = [new THREE.Vector2(.5, .666), new THREE.Vector2(1, .666), new THREE.Vector2(1, 1), new THREE.Vector2(.5, 1)];
-var crate = [new THREE.Vector2(0, .333), new THREE.Vector2(.5, .333), new THREE.Vector2(.5, .666), new THREE.Vector2(0, .666)];
-var stone = [new THREE.Vector2(.5, .333), new THREE.Vector2(1, .333), new THREE.Vector2(1, .666), new THREE.Vector2(.5, .666)];
-var water = [new THREE.Vector2(0, 0), new THREE.Vector2(.5, 0), new THREE.Vector2(.5, .333), new THREE.Vector2(0, .333)];
-var wood = [new THREE.Vector2(.5, 0), new THREE.Vector2(1, 0), new THREE.Vector2(1, .333), new THREE.Vector2(.5, .333)];
+                map: THREE.ImageUtils.loadTexture('./image/texture-atlas.jpg'),
+                transparent: true,
+                opacity: 0.7
+            });
 
-        var geometry = new THREE.CubeGeometry(100,100,100); 
-        geometry.faceVertexUvs[0] = [];
-        geometry.faceVertexUvs[0][0] = [ bricks[0], bricks[1], bricks[3] ];
-        geometry.faceVertexUvs[0][1] = [ bricks[1], bricks[2], bricks[3] ];
-          
-        geometry.faceVertexUvs[0][2] = [ clouds[0], clouds[1], clouds[3] ];
-        geometry.faceVertexUvs[0][3] = [ clouds[1], clouds[2], clouds[3] ];
-          
-        geometry.faceVertexUvs[0][4] = [ crate[0], crate[1], crate[3] ];
-        geometry.faceVertexUvs[0][5] = [ crate[1], crate[2], crate[3] ];
-          
-        geometry.faceVertexUvs[0][6] = [ stone[0], stone[1], stone[3] ];
-        geometry.faceVertexUvs[0][7] = [ stone[1], stone[2], stone[3] ];
-          
-        geometry.faceVertexUvs[0][8] = [ water[0], water[1], water[3] ];
-        geometry.faceVertexUvs[0][9] = [ water[1], water[2], water[3] ];
-          
-        geometry.faceVertexUvs[0][10] = [ wood[0], wood[1], wood[3] ];
-        geometry.faceVertexUvs[0][11] = [ wood[1], wood[2], wood[3] ];
+            var bricks = [new THREE.Vector2(0, .666), new THREE.Vector2(.5, .666), new THREE.Vector2(.5, 1), new THREE.Vector2(0, 1)];
+            var clouds = [new THREE.Vector2(.5, .666), new THREE.Vector2(1, .666), new THREE.Vector2(1, 1), new THREE.Vector2(.5, 1)];
+            var crate = [new THREE.Vector2(0, .333), new THREE.Vector2(.5, .333), new THREE.Vector2(.5, .666), new THREE.Vector2(0, .666)];
+            var stone = [new THREE.Vector2(.5, .333), new THREE.Vector2(1, .333), new THREE.Vector2(1, .666), new THREE.Vector2(.5, .666)];
+            var water = [new THREE.Vector2(0, 0), new THREE.Vector2(.5, 0), new THREE.Vector2(.5, .333), new THREE.Vector2(0, .333)];
+            var wood = [new THREE.Vector2(.5, 0), new THREE.Vector2(1, 0), new THREE.Vector2(1, .333), new THREE.Vector2(.5, .333)];
 
-        var mesh = new THREE.Mesh( geometry , material);
-        mesh.position.set(0,200,150);
-        mesh.rotation.x = - 1*Math.PI;
-        mesh.rotation.y = - 1 * Math.PI;
-        scene.add(mesh);
-        console.log("mesh:"+mesh);
-        console.log(mesh);
+            geometry.faceVertexUvs[0] = [];
+
+            geometry.faceVertexUvs[0][0] = [bricks[0], bricks[1], bricks[3]];
+            geometry.faceVertexUvs[0][1] = [bricks[1], bricks[2], bricks[3]];
+
+            geometry.faceVertexUvs[0][2] = [clouds[0], clouds[1], clouds[3]];
+            geometry.faceVertexUvs[0][3] = [clouds[1], clouds[2], clouds[3]];
+
+            geometry.faceVertexUvs[0][4] = [crate[0], crate[1], crate[3]];
+            geometry.faceVertexUvs[0][5] = [crate[1], crate[2], crate[3]];
+
+            geometry.faceVertexUvs[0][6] = [stone[0], stone[1], stone[3]];
+            geometry.faceVertexUvs[0][7] = [stone[1], stone[2], stone[3]];
+
+            geometry.faceVertexUvs[0][8] = [water[0], water[1], water[3]];
+            geometry.faceVertexUvs[0][9] = [water[1], water[2], water[3]];
+
+            geometry.faceVertexUvs[0][10] = [wood[0], wood[1], wood[3]];
+            geometry.faceVertexUvs[0][11] = [wood[1], wood[2], wood[3]];
+
+            mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(100,100,100);
+            mesh.rotation.x = 0.9;
+            mesh.rotation.y = 0.9;
+            scene.add( mesh );
 	}
 
     //createMesh
