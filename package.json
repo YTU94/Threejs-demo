@@ -1,0 +1,28 @@
+{
+  "name": "threejs",
+  "version": "1.0.0",
+  "description": "threejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YTU94/Threejs-demo.git"
+  },
+  "keywords": [
+    "threejs"
+  ],
+  "author": "yjk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YTU94/Threejs-demo/issues"
+  },
+  "homepage": "https://github.com/YTU94/Threejs-demo#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-webserver": "^0.9.1"
+  }
+}

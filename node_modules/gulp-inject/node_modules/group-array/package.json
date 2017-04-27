@@ -1,0 +1,123 @@
+{
+  "name": "group-array",
+  "description": "Group array of objects into lists.",
+  "version": "0.3.3",
+  "homepage": "https://github.com/doowb/group-array",
+  "author": {
+    "name": "Brian Woodward",
+    "url": "https://github.com/doowb"
+  },
+  "contributors": [
+    {
+      "name": "Brian Woodward",
+      "email": "brian.woodward@gmail.com",
+      "url": "https://twitter.com/doowb"
+    },
+    {
+      "name": "Chris Kirk",
+      "url": "http://www.chrispkirk.com"
+    },
+    {
+      "name": "Jon Schlinkert",
+      "email": "jon.schlinkert@sellside.com",
+      "url": "http://twitter.com/jonschlinkert"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doowb/group-array.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doowb/group-array/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "arr-flatten": "^1.0.1",
+    "for-own": "^0.1.4",
+    "get-value": "^2.0.6",
+    "kind-of": "^3.1.0",
+    "split-string": "^1.0.1",
+    "union-value": "^0.2.3"
+  },
+  "devDependencies": {
+    "gulp-format-md": "^0.1.11",
+    "mocha": "^3.2.0",
+    "should": "^11.2.0"
+  },
+  "keywords": [
+    "array",
+    "group",
+    "item",
+    "list",
+    "nested",
+    "prop",
+    "properties",
+    "property"
+  ],
+  "verb": {
+    "toc": true,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": [
+        "arr-flatten",
+        "get-value",
+        "group-object",
+        "union-value"
+      ]
+    },
+    "reflinks": [
+      "verb",
+      "verb-generate-readme"
+    ],
+    "lint": {
+      "reflinks": true
+    }
+  },
+  "gitHead": "69c01ca548146e7a5c12eb2ad7c0310161854cb9",
+  "_id": "group-array@0.3.3",
+  "_shasum": "bbd9d2f718df4be33f0fb90432aaf1b4360e498f",
+  "_from": "group-array@>=0.3.0 <0.4.0",
+  "_npmVersion": "3.10.10",
+  "_nodeVersion": "6.10.1",
+  "_npmUser": {
+    "name": "doowb",
+    "email": "brian.woodward@gmail.com"
+  },
+  "dist": {
+    "shasum": "bbd9d2f718df4be33f0fb90432aaf1b4360e498f",
+    "tarball": "https://registry.npmjs.org/group-array/-/group-array-0.3.3.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "doowb",
+      "email": "brian.woodward@gmail.com"
+    },
+    {
+      "name": "jonschlinkert",
+      "email": "github@sellside.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/group-array-0.3.3.tgz_1491952391583_0.5574820830952376"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/group-array/-/group-array-0.3.3.tgz",
+  "readme": "ERROR: No README data found!"
+}
