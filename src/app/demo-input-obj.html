@@ -3,14 +3,28 @@
     <head>
         <meta charset="UTF-8">
         <title></title>
+            <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
+        <div class="container" id="main">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron text-center fedis-main">
+                    <h1>ThreeJS</h1>                    
+                    <p>Front-End development integration solution</p>
+                   <a href="./index.html"><-back</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="space"></div>  
     <script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
-    <script src="./lib/three.min.js"></script>
-    <script src="./lib/MTLLoader.js"></script>
-    <script src="./lib/OBJLoader.js"></script>
-    <script src="./lib/OrbitControls.js"></script>
+    <script src="../js/three.min.js"></script>
+    <script src="../js/MTLLoader.js"></script>
+    <script src="../js/OBJLoader.js"></script>
+    <script src="../js/OrbitControls.js"></script>
     <script>
 
 
@@ -65,10 +79,10 @@
 
   
             createMtlObj({
-                mtlBaseUrl:"./image/model/",
-                mtlPath: "./image/model/",
+                mtlBaseUrl:"../image/model/",
+                mtlPath: "../image/model/",
                 mtlFileName:"19.mtl",
-                objPath:"./image/model/",
+                objPath:"../image/model/",
                 objFileName:"19.obj",
                 completeCallback:function(object){
                     object.traverse(function(child) { 

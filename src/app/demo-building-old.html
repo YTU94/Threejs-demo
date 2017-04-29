@@ -3,17 +3,19 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Demo-Test</title>
-	<script src="./lib/three.min.js"></script>
-    <script src="./lib/OrbitControls.js"></script> 
-    <script src="./lib/Tween.js"></script> 
-    <script src="./lib/MTLLoader.js"></script>
-    <script src="./lib/OBJLoader.js"></script>   
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        
+    <script type="text/javascript" src="../js/three.min.js"></script>
+    <script type="text/javascript" src="../js/OrbitControls.js"></script> 
+    <script type="text/javascript" src="../js/Tween.js"></script>    
+    <script src="../js/MTLLoader.js"></script>
+    <script src="../js/OBJLoader.js"></script>      
+    <script src="https://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script type="text/javascript" src="../js/threeDemo.js"></script> 
 
 <style>
 .canvas{ position: relative;  z-index: 10003;}
@@ -22,6 +24,17 @@
 </style>
 </head>
 <body>
+    <div class="container" id="main">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron text-center fedis-main">
+                    <h1>ThreeJS</h1>                    
+                    <p>Front-End development integration solution</p>
+                   <a href="./index.html"><-back</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="canvas" class="canvas">
         <canvas id="MainCanvas" width="100%" height="100%"></canvas>
     </div>
