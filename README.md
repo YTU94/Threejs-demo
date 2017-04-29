@@ -1,5 +1,6 @@
 # Threejs-demo
-![image]https://github.com/YTU94/Threejs-demo/blob/master/src/image/demo-img/index.png)
+
+![image](https://github.com/YTU94/Threejs-demo/blob/master/src/image/demo-img/index.png)
 <br>
 Some demos for Three.js
 
