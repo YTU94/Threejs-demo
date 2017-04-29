@@ -1,6 +1,5 @@
 # Threejs-demo
-![ABC](http://www.baidu.com/img/bdlogo.gif) 
-![image](https://github.com/YTU94/Threejs-demo/src/image/demo-img/index.png)
+![ABC]https://github.com/YTU94/Threejs-demo/blob/master/src/image/demo-img/index.png)
 <br>
 Some demos for Three.js
 
