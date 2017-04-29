@@ -1,4 +1,6 @@
 # Threejs-demo
+(页面)
+![image](https://github.com/YTU94/Threejs-demo/src/image/demo-img/index.png)
 Some demos for Three.js
 
 >1.git clone ...
