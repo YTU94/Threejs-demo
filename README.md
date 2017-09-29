@@ -1,5 +1,5 @@
 # Threejs-demo
-地址：http://jiankang.juwu168.com/threejs/
+地址：http://jiankang.juwu168.com/threejs
 ![image](https://github.com/YTU94/Threejs-demo/blob/master/src/image/demo-img/index.png)
 <br>
 Some demos for Three.js
